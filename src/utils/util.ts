@@ -1,4 +1,5 @@
 /**
+import { str } from 'envalid';
  * @method isEmpty
  * @param {String | Number | Object} value
  * @returns {Boolean} true & false
@@ -16,4 +17,15 @@ export const isEmpty = (value: string | number | object): boolean => {
   } else {
     return false;
   }
+};
+
+export const getFirstWords = (input: String, numberOfWords: number): String => {
+  const words: string[] = input.match(/\S+\s*/g);
+
+  if (!words || words.length < numberOfWords) {
+    return input;
+  }
+
+  const result = words.slice(0, numberOfWords).join('');
+  return result;
 };
