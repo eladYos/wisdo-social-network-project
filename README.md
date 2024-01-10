@@ -15,5 +15,6 @@ local mongo-db
 
 ##Todo##
 - add cache layer to some db calls
+- add pagination to feed(!!)
 - add ability to like/unlike post
 - add ability for moderator to approve a post
