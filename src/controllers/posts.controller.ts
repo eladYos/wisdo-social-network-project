@@ -33,11 +33,9 @@ class PostsController {
     }
   };
 
-
   public getFeed = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const { postId } = req.params;
-      const post: Post = await this.postsService.getFeed(userInfo);
+      const post: Post[] = await this.postsService.getFeed(req.user);
 
       res.status(200).json({ data: post });
     } catch (error) {

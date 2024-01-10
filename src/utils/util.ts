@@ -39,14 +39,3 @@ export const getNumberOfWordsInString = (input: string): number => {
   if (Array.isArray(words)) return words.length;
   return 0;
 };
-
-export function arrayToChunks<T>(inputArray: T[], chunkSize: number): T[][] {
-  const arrLength = inputArray.length;
-  const outputArray = [];
-  const index = 0;
-  while (index < arrLength) {
-    const currentChunk = inputArray.slice(index, index + chunkSize);
-    outputArray.push(currentChunk);
-  }
-  return outputArray;
-}

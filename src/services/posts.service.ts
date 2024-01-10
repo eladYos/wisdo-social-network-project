@@ -8,12 +8,23 @@ import { User } from '@/interfaces/entities/user.interface';
 import WatchListService from './watch-list.service';
 import { sendEmail } from '@/utils/emailHandler';
 import { postStatus } from '@/utils/constants';
+import { getAggregateFunction } from './posts.aggregation';
+import postsStatsModel from '@/models/posts-stats-model';
 
 class PostsService {
   private watchListService = new WatchListService();
 
   public async getFeed(userInfo: User): Promise<Post[]> {
-    const posts: Post[] = await postsModel.find();
+    // this should be cached
+    const { mostLikedPostCount, longestPostCount } = await postsStatsModel.findOne();
+    const aggregationFunction = getAggregateFunction({
+      inputUserCountry: userInfo.country,
+      inputUserCommunityIds: userInfo.communityIds.map(object => object.toString()),
+      maxLikes: mostLikedPostCount,
+      maxPostLength: longestPostCount,
+    });
+
+    const posts: Post[] = await postsModel.aggregate(aggregationFunction);
     return posts;
   }
 

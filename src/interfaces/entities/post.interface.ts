@@ -9,5 +9,4 @@ export interface Post extends BaseEntity {
   communityId: Types.ObjectId;
   likes: number;
   status: string;
-  score: number;
 }

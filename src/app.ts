@@ -9,7 +9,7 @@ import { NODE_ENV, PORT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from '@databases';
 import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
-import { initializePostsScoreUpdater } from '@/services/posts-score-update.service';
+import { initializePostsScoreUpdater } from '@/services/posts-score-stats-update.service';
 
 class App {
   public app: express.Application;

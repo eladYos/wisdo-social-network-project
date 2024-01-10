@@ -15,8 +15,8 @@ class PostsRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post(`${this.path}`, authMiddleware, this.postsController.createPost);
-    this.router.get(`${this.path}/:postId`, authMiddleware, this.postsController.getPost);
     this.router.get(`${this.path}/feed`, authMiddleware, this.postsController.getFeed);
+    this.router.get(`${this.path}/:postId`, authMiddleware, this.postsController.getPost);
   }
 }
 

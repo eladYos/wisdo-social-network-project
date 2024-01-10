@@ -1,23 +1,19 @@
 import PostsService from './posts.service';
 import postsStatsModel from '../models/posts-stats-model';
-import { PostsStats } from '@/interfaces/entities/posts-stats.interface';
-import { postsModel } from '@models/posts.model';
 
 const INTERVAL = 5 * 60 * 60 * 1000;
 
 const postsService = new PostsService();
-const updaterServiceInitialized = false;
 
+/**
+ * periodacally updates basic stats about existing posts
+ * used for calculating the users posts
+ */
 export function initializePostsScoreUpdater() {
-  if (!updaterServiceInitialized) {
-    updateScores();
-    setInterval(updateScores, INTERVAL);
-  }
+  updateScoreStats();
+  setInterval(updateScoreStats, INTERVAL);
 }
 
-async function updateScores() {
-  const { longestPostCount, mostLikedPostCount } = await updateScoreStats();
-}
 async function updateScoreStats() {
   const [longestPost, mostLikedPost] = await Promise.all([postsService.getLongestPost(), postsService.getMostLikedPost()]);
   const { body: longestPostBody } = longestPost;
