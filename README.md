@@ -13,7 +13,7 @@ run:
 Requirements:
 local mongo-db
 
-##Todo##
+## Todo ##
 - add cache layer to some db calls
 - add pagination to feed(!!)
 - add ability to like/unlike post
