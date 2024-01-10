@@ -1,5 +1,5 @@
-import CommunityModel from '@models/communities.model';
 import UserModel from '@models/users.model';
+import CommunityModel from '@models/communities.model';
 import PostModel from '@models/posts.model';
 import mongoose from 'mongoose';
 
@@ -9,6 +9,7 @@ import { dbConnection } from '@databases';
 import { User } from '@/interfaces/entities/user.interface';
 import { randomInt } from 'crypto';
 import { Post } from '@/interfaces/entities/post.interface';
+import { postStatus } from '@/utils/constants';
 
 mongoose.connect(dbConnection.url);
 
@@ -21,7 +22,6 @@ async function populateDb() {
     const communityModel = new CommunityModel({
       title: faker.word.sample(10),
       image: faker.internet.url(),
-      role: 'something',
     });
     return communityModel;
   });
@@ -41,11 +41,11 @@ async function populateDb() {
       const userPosts = new Array(10).fill(0).map(() => {
         const post: Omit<Post, '_id'> = {
           authorId: user._id,
-          body: faker.string.sample(30),
+          body: faker.word.words(30),
           communityId: user.communityIds[0],
           likes: faker.number.int(100),
-          status: 'approved',
-          summary: faker.string.sample(10),
+          status: postStatus.APPROVED,
+          summary: faker.word.words(10),
           title: faker.string.sample(10),
         };
         return new PostModel(post);
@@ -54,6 +54,6 @@ async function populateDb() {
     });
   }
 }
-
-populateDb();
-console.log('done');
+clearDb()
+  .then(() => populateDb())
+  .then(() => console.log('done'));

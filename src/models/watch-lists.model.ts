@@ -10,6 +10,6 @@ const watchListSchemaFields: Omit<Record<keyof WatchList, any>, '_id'> = {
 
 const watchListSchema: Schema = new Schema(watchListSchemaFields);
 
-const watchListModel = model<WatchList & Document>('WatchList', watchListSchema);
+const watchListModel = model<WatchList & Document>('watch-list', watchListSchema);
 
 export default watchListModel;

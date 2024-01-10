@@ -19,7 +19,11 @@ export const isEmpty = (value: string | number | object): boolean => {
   }
 };
 
-export const getFirstWords = (input: String, numberOfWords: number): String => {
+export const getWordsFromString = (input: string) => {
+  return input.match(/\b(\w+)\b/g) ?? [];
+};
+
+export const getFirstWords = (input: string, numberOfWords: number): string => {
   const words: string[] = input.match(/\S+\s*/g);
 
   if (!words || words.length < numberOfWords) {
@@ -29,3 +33,20 @@ export const getFirstWords = (input: String, numberOfWords: number): String => {
   const result = words.slice(0, numberOfWords).join('');
   return result;
 };
+
+export const getNumberOfWordsInString = (input: string): number => {
+  const words: string[] | boolean = input.match(/\S+\s*/g);
+  if (Array.isArray(words)) return words.length;
+  return 0;
+};
+
+export function arrayToChunks<T>(inputArray: T[], chunkSize: number): T[][] {
+  const arrLength = inputArray.length;
+  const outputArray = [];
+  const index = 0;
+  while (index < arrLength) {
+    const currentChunk = inputArray.slice(index, index + chunkSize);
+    outputArray.push(currentChunk);
+  }
+  return outputArray;
+}

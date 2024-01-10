@@ -1,6 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 import { User } from '@/interfaces/entities/user.interface';
 import communityModel from './communities.model';
+import { userRoles } from '@/utils/constants';
 
 const userSchemaFields: Omit<Record<keyof User, any>, '_id'> = {
   name: {
@@ -14,6 +15,7 @@ const userSchemaFields: Omit<Record<keyof User, any>, '_id'> = {
   role: {
     type: String,
     required: false,
+    enum: Object.values(userRoles),
   },
   image: {
     type: String,
@@ -39,6 +41,6 @@ const userSchemaFields: Omit<Record<keyof User, any>, '_id'> = {
 
 const userSchema: Schema = new Schema(userSchemaFields);
 
-const userModel = model<User & Document>('User', userSchema);
+const userModel = model<User & Document>('user', userSchema);
 
 export default userModel;

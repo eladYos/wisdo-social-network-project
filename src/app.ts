@@ -4,15 +4,12 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import morgan from 'morgan';
 import { connect, set, disconnect } from 'mongoose';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import { NODE_ENV, PORT, LOG_FORMAT, ORIGIN, CREDENTIALS } from '@config';
+import { NODE_ENV, PORT, ORIGIN, CREDENTIALS } from '@config';
 import { dbConnection } from '@databases';
-import { Routes } from '@interfaces/routes.interface';
+import { Routes } from '@/interfaces/routes.interface';
 import errorMiddleware from '@middlewares/error.middleware';
-import { logger, stream } from '@utils/logger';
+import { initializePostsScoreUpdater } from '@/services/posts-score-update.service';
 
 class App {
   public app: express.Application;
@@ -27,16 +24,16 @@ class App {
     this.connectToDatabase();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
-    this.initializeSwagger();
     this.initializeErrorHandling();
+    initializePostsScoreUpdater();
   }
 
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`=================================`);
-      logger.info(`======= ENV: ${this.env} =======`);
-      logger.info(`🚀 App listening on the port ${this.port}`);
-      logger.info(`=================================`);
+      console.info(`=================================`);
+      console.info(`======= ENV: ${this.env} =======`);
+      console.info(`🚀 App listening on the port ${this.port}`);
+      console.info(`=================================`);
     });
   }
 
@@ -62,7 +59,6 @@ class App {
   }
 
   private initializeMiddlewares() {
-    this.app.use(morgan(LOG_FORMAT, { stream }));
     this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
     this.app.use(hpp());
     this.app.use(helmet());
@@ -76,22 +72,6 @@ class App {
     routes.forEach(route => {
       this.app.use('/', route.router);
     });
-  }
-
-  private initializeSwagger() {
-    const options = {
-      swaggerDefinition: {
-        info: {
-          title: 'REST API',
-          version: '1.0.0',
-          description: 'Example docs',
-        },
-      },
-      apis: ['swagger.yaml'],
-    };
-
-    const specs = swaggerJSDoc(options);
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
   }
 
   private initializeErrorHandling() {
